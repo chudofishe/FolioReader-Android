@@ -33,6 +33,7 @@ import com.folioreader.model.event.*
 import com.folioreader.model.locators.ReadLocator
 import com.folioreader.model.locators.SearchLocator
 import com.folioreader.model.sqlite.HighLightTable
+import com.folioreader.ui.activity.FolioActivity
 import com.folioreader.ui.activity.FolioActivityCallback
 import com.folioreader.ui.base.HtmlTask
 import com.folioreader.ui.base.HtmlTaskCallback
@@ -137,8 +138,11 @@ class FolioPageFragment : Fragment(),
         this.savedInstanceState = savedInstanceState
         uiHandler = Handler()
 
-        if (activity is FolioActivityCallback)
-            mActivityCallback = activity as FolioActivityCallback?
+        mActivityCallback = if (activity is FolioActivity)
+            activity as FolioActivityCallback
+        else
+            parentFragment as FolioActivityCallback
+
 
         EventBus.getDefault().register(this)
 
@@ -359,6 +363,8 @@ class FolioPageFragment : Fragment(),
 
         if (activity is FolioActivityCallback)
             mWebview!!.setFolioActivityCallback((activity as FolioActivityCallback?)!!)
+        else
+            mWebview!!.setFolioActivityCallback((parentFragment as FolioActivityCallback?)!!)
 
         setupScrollBar()
         mWebview!!.addOnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->

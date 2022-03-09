@@ -18,6 +18,7 @@ import com.folioreader.R
 import com.folioreader.model.event.ReloadDataEvent
 import com.folioreader.ui.activity.FolioActivity
 import com.folioreader.ui.activity.FolioActivityCallback
+import com.folioreader.ui.fragment.FolioContentFragment
 import com.folioreader.ui.fragment.MediaControllerFragment
 import com.folioreader.util.AppUtil
 import com.folioreader.util.UiUtil
@@ -51,6 +52,8 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
         if (activity is FolioActivity)
             activityCallback = activity as FolioActivity
+        else
+            activityCallback = parentFragment as FolioContentFragment
 
         view.viewTreeObserver.addOnGlobalLayoutListener {
             val dialog = dialog as BottomSheetDialog

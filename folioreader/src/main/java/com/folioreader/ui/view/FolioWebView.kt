@@ -575,84 +575,84 @@ class FolioWebView : WebView {
         //return super.startActionMode(callback, type)
     }
 
-    private fun applyThemeColorToHandles() {
-        Log.v(LOG_TAG, "-> applyThemeColorToHandles")
-
-        if (Build.VERSION.SDK_INT < 23) {
-            val folioActivityRef: WeakReference<FolioActivity> = folioActivityCallback.activity
-            val mWindowManagerField = ReflectionUtils.findField(FolioActivity::class.java, "mWindowManager")
-            mWindowManagerField.isAccessible = true
-            val mWindowManager = mWindowManagerField.get(folioActivityRef.get())
-
-            val windowManagerImplClass = Class.forName("android.view.WindowManagerImpl")
-            val mGlobalField = ReflectionUtils.findField(windowManagerImplClass, "mGlobal")
-            mGlobalField.isAccessible = true
-            val mGlobal = mGlobalField.get(mWindowManager)
-
-            val windowManagerGlobalClass = Class.forName("android.view.WindowManagerGlobal")
-            val mViewsField = ReflectionUtils.findField(windowManagerGlobalClass, "mViews")
-            mViewsField.isAccessible = true
-            val mViews = mViewsField.get(mGlobal) as ArrayList<View>
-            val config = AppUtil.getSavedConfig(context)!!
-
-            for (view in mViews) {
-                val handleViewClass = Class.forName("com.android.org.chromium.content.browser.input.HandleView")
-
-                if (handleViewClass.isInstance(view)) {
-                    val mDrawableField = ReflectionUtils.findField(handleViewClass, "mDrawable")
-                    mDrawableField.isAccessible = true
-                    val mDrawable = mDrawableField.get(view) as BitmapDrawable
-                    UiUtil.setColorIntToDrawable(config.themeColor, mDrawable)
-                }
-            }
-
-        } else {
-            val folioActivityRef: WeakReference<FolioActivity> = folioActivityCallback.activity
-            val mWindowManagerField = ReflectionUtils.findField(FolioActivity::class.java, "mWindowManager")
-            mWindowManagerField.isAccessible = true
-            val mWindowManager = mWindowManagerField.get(folioActivityRef.get())
-
-            val windowManagerImplClass = Class.forName("android.view.WindowManagerImpl")
-            val mGlobalField = ReflectionUtils.findField(windowManagerImplClass, "mGlobal")
-            mGlobalField.isAccessible = true
-            val mGlobal = mGlobalField.get(mWindowManager)
-
-            val windowManagerGlobalClass = Class.forName("android.view.WindowManagerGlobal")
-            val mViewsField = ReflectionUtils.findField(windowManagerGlobalClass, "mViews")
-            mViewsField.isAccessible = true
-            val mViews = mViewsField.get(mGlobal) as ArrayList<View>
-            val config = AppUtil.getSavedConfig(context)!!
-
-            for (view in mViews) {
-                val popupDecorViewClass = Class.forName("android.widget.PopupWindow\$PopupDecorView")
-
-                if (!popupDecorViewClass.isInstance(view))
-                    continue
-
-                val mChildrenField = ReflectionUtils.findField(popupDecorViewClass, "mChildren")
-                mChildrenField.isAccessible = true
-                val mChildren = mChildrenField.get(view) as kotlin.Array<View>
-
-                //val pathClassLoader = PathClassLoader("/system/app/Chrome/Chrome.apk", ClassLoader.getSystemClassLoader())
-
-                val pathClassLoader =
-                    PathClassLoader("/system/app/Chrome/Chrome.apk", folioActivityRef.get()?.classLoader)
-
-                val popupTouchHandleDrawableClass = Class.forName(
-                    "org.chromium.android_webview.PopupTouchHandleDrawable",
-                    true, pathClassLoader
-                )
-
-                //if (!popupTouchHandleDrawableClass.isInstance(mChildren[0]))
-                //    continue
-
-                val mDrawableField = ReflectionUtils.findField(popupTouchHandleDrawableClass, "mDrawable")
-                mDrawableField.isAccessible = true
-                val mDrawable = mDrawableField.get(mChildren[0]) as Drawable
-                UiUtil.setColorIntToDrawable(config.themeColor, mDrawable)
-            }
-        }
-    }
+//    private fun applyThemeColorToHandles() {
+//        Log.v(LOG_TAG, "-> applyThemeColorToHandles")
+//
+//        if (Build.VERSION.SDK_INT < 23) {
+//            val folioActivityRef: WeakReference<FolioActivity> = folioActivityCallback.activity
+//            val mWindowManagerField = ReflectionUtils.findField(FolioActivity::class.java, "mWindowManager")
+//            mWindowManagerField.isAccessible = true
+//            val mWindowManager = mWindowManagerField.get(folioActivityRef.get())
+//
+//            val windowManagerImplClass = Class.forName("android.view.WindowManagerImpl")
+//            val mGlobalField = ReflectionUtils.findField(windowManagerImplClass, "mGlobal")
+//            mGlobalField.isAccessible = true
+//            val mGlobal = mGlobalField.get(mWindowManager)
+//
+//            val windowManagerGlobalClass = Class.forName("android.view.WindowManagerGlobal")
+//            val mViewsField = ReflectionUtils.findField(windowManagerGlobalClass, "mViews")
+//            mViewsField.isAccessible = true
+//            val mViews = mViewsField.get(mGlobal) as ArrayList<View>
+//            val config = AppUtil.getSavedConfig(context)!!
+//
+//            for (view in mViews) {
+//                val handleViewClass = Class.forName("com.android.org.chromium.content.browser.input.HandleView")
+//
+//                if (handleViewClass.isInstance(view)) {
+//                    val mDrawableField = ReflectionUtils.findField(handleViewClass, "mDrawable")
+//                    mDrawableField.isAccessible = true
+//                    val mDrawable = mDrawableField.get(view) as BitmapDrawable
+//                    UiUtil.setColorIntToDrawable(config.themeColor, mDrawable)
+//                }
+//            }
+//
+//        } else {
+//            val folioActivityRef: WeakReference<FolioActivity> = folioActivityCallback.activity
+//            val mWindowManagerField = ReflectionUtils.findField(FolioActivity::class.java, "mWindowManager")
+//            mWindowManagerField.isAccessible = true
+//            val mWindowManager = mWindowManagerField.get(folioActivityRef.get())
+//
+//            val windowManagerImplClass = Class.forName("android.view.WindowManagerImpl")
+//            val mGlobalField = ReflectionUtils.findField(windowManagerImplClass, "mGlobal")
+//            mGlobalField.isAccessible = true
+//            val mGlobal = mGlobalField.get(mWindowManager)
+//
+//            val windowManagerGlobalClass = Class.forName("android.view.WindowManagerGlobal")
+//            val mViewsField = ReflectionUtils.findField(windowManagerGlobalClass, "mViews")
+//            mViewsField.isAccessible = true
+//            val mViews = mViewsField.get(mGlobal) as ArrayList<View>
+//            val config = AppUtil.getSavedConfig(context)!!
+//
+//            for (view in mViews) {
+//                val popupDecorViewClass = Class.forName("android.widget.PopupWindow\$PopupDecorView")
+//
+//                if (!popupDecorViewClass.isInstance(view))
+//                    continue
+//
+//                val mChildrenField = ReflectionUtils.findField(popupDecorViewClass, "mChildren")
+//                mChildrenField.isAccessible = true
+//                val mChildren = mChildrenField.get(view) as kotlin.Array<View>
+//
+//                //val pathClassLoader = PathClassLoader("/system/app/Chrome/Chrome.apk", ClassLoader.getSystemClassLoader())
+//
+//                val pathClassLoader =
+//                    PathClassLoader("/system/app/Chrome/Chrome.apk", folioActivityRef.get()?.classLoader)
+//
+//                val popupTouchHandleDrawableClass = Class.forName(
+//                    "org.chromium.android_webview.PopupTouchHandleDrawable",
+//                    true, pathClassLoader
+//                )
+//
+//                //if (!popupTouchHandleDrawableClass.isInstance(mChildren[0]))
+//                //    continue
+//
+//                val mDrawableField = ReflectionUtils.findField(popupTouchHandleDrawableClass, "mDrawable")
+//                mDrawableField.isAccessible = true
+//                val mDrawable = mDrawableField.get(mChildren[0]) as Drawable
+//                UiUtil.setColorIntToDrawable(config.themeColor, mDrawable)
+//            }
+//        }
+//    }
 
     @JavascriptInterface
     fun setSelectionRect(left: Int, top: Int, right: Int, bottom: Int) {

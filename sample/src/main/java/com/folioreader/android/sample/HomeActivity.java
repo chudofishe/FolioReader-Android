@@ -21,6 +21,10 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.folioreader.Config;
@@ -28,6 +32,7 @@ import com.folioreader.FolioReader;
 import com.folioreader.model.HighLight;
 import com.folioreader.model.locators.ReadLocator;
 import com.folioreader.ui.base.OnSaveHighlight;
+import com.folioreader.ui.fragment.FolioContentFragment;
 import com.folioreader.util.AppUtil;
 import com.folioreader.util.OnHighlightListener;
 import com.folioreader.util.ReadLocatorListener;
@@ -55,38 +60,60 @@ public class HomeActivity extends AppCompatActivity
                 .setReadLocatorListener(this)
                 .setOnClosedListener(this);
 
-        getHighlightsAndSave();
+        ReadLocator readLocator = getLastReadLocator();
 
-        findViewById(R.id.btn_raw).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Config config = AppUtil.getSavedConfig(getApplicationContext());
+        if (config == null)
+            config = new Config();
+        config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
 
-                Config config = AppUtil.getSavedConfig(getApplicationContext());
-                if (config == null)
-                    config = new Config();
-                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
+        folioReader.setReadLocator(readLocator);
+        folioReader.setConfig(config, true);
+        openBook("file:///android_asset/TheSilverChair.epub");
 
-                folioReader.setConfig(config, true)
-                        .openBook(R.raw.accessible_epub_3);
-            }
-        });
+//        getHighlightsAndSave();
 
-        findViewById(R.id.btn_assest).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        findViewById(R.id.btn_raw).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Config config = AppUtil.getSavedConfig(getApplicationContext());
+//                if (config == null)
+//                    config = new Config();
+//                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
+//
+//                folioReader.setConfig(config, true)
+//                        .openBook(R.raw.accessible_epub_3);
+//            }
+//        });
 
-                ReadLocator readLocator = getLastReadLocator();
+//        findViewById(R.id.btn_assest).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                ReadLocator readLocator = getLastReadLocator();
+//
+//                Config config = AppUtil.getSavedConfig(getApplicationContext());
+//                if (config == null)
+//                    config = new Config();
+//                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
+//
+//                folioReader.setReadLocator(readLocator);
+//                folioReader.setConfig(config, true);
+//                openBook("file:///android_asset/TheSilverChair.epub");
+//            }
+//        });
+    }
 
-                Config config = AppUtil.getSavedConfig(getApplicationContext());
-                if (config == null)
-                    config = new Config();
-                config.setAllowedDirection(Config.AllowedDirection.VERTICAL_AND_HORIZONTAL);
-
-                folioReader.setReadLocator(readLocator);
-                folioReader.setConfig(config, true)
-                        .openBook("file:///android_asset/TheSilverChair.epub");
-            }
-        });
+    public void openBook(String assetOrSdcardPath) {
+        Bundle bundle = folioReader.getBundleFromUrl(assetOrSdcardPath, 0);
+        Fragment folioReaderFragment = new FolioContentFragment();
+        folioReaderFragment.setArguments(bundle);
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.contentFrame, folioReaderFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private ReadLocator getLastReadLocator() {

@@ -43,6 +43,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.folioreader.Config
 import com.folioreader.Constants
@@ -295,6 +297,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         } else {
             setupBook()
         }
+
     }
 
     private fun initActionBar() {
@@ -686,10 +689,6 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         }
     }
 
-    override fun getActivity(): WeakReference<FolioActivity> {
-        return WeakReference(this)
-    }
-
     override fun onSystemUiVisibilityChange(visibility: Int) {
         Log.v(LOG_TAG, "-> onSystemUiVisibilityChange -> visibility = $visibility")
 
@@ -785,6 +784,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RequestCode.SEARCH.value) {
             Log.v(LOG_TAG, "-> onActivityResult -> " + RequestCode.SEARCH)

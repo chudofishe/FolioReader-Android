@@ -81,8 +81,15 @@ public class FileUtil {
             int fileMaxIndex = epubFileName.length();
             epubFileName = epubFileName.substring(0, fileMaxIndex - 5);
         }
-
         return epubFileName;
+    }
+
+    public static String getEpubFilename(String epubFilePath) {
+        String epubFileName;
+        String[] temp = epubFilePath.split("/");
+        epubFileName = temp[temp.length - 1];
+        int fileMaxIndex = epubFileName.length();
+        return epubFileName.substring(0, fileMaxIndex - 5);
     }
 
     public static Boolean saveTempEpubFile(String filePath, String fileName, InputStream inputStream) {
