@@ -182,27 +182,22 @@ public class FolioReader {
         return intent;
     }
 
-    public Bundle getBundleFromUrl(String assetOrSdcardPath, int rawId) {
+    public Bundle getBundleFromUrl(String path) {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Config.INTENT_CONFIG, config);
         bundle.putBoolean(Config.EXTRA_OVERRIDE_CONFIG, overrideConfig);
         bundle.putInt(EXTRA_PORT_NUMBER, portNumber);
         bundle.putParcelable(FolioActivity.EXTRA_READ_LOCATOR, (Parcelable) readLocator);
 
-        if (rawId != 0) {
-            bundle.putInt(FolioActivity.INTENT_EPUB_SOURCE_PATH, rawId);
-            bundle.putSerializable(FolioActivity.INTENT_EPUB_SOURCE_TYPE,
-                    FolioActivity.EpubSourceType.RAW);
-        } else if (assetOrSdcardPath.contains(Constants.ASSET)) {
-            bundle.putString(FolioActivity.INTENT_EPUB_SOURCE_PATH, assetOrSdcardPath);
+        if (path.contains(Constants.ASSET)) {
+            bundle.putString(FolioActivity.INTENT_EPUB_SOURCE_PATH, path);
             bundle.putSerializable(FolioActivity.INTENT_EPUB_SOURCE_TYPE,
                     FolioActivity.EpubSourceType.ASSETS);
         } else {
-            bundle.putString(FolioActivity.INTENT_EPUB_SOURCE_PATH, assetOrSdcardPath);
+            bundle.putString(FolioActivity.INTENT_EPUB_SOURCE_PATH, path);
             bundle.putSerializable(FolioActivity.INTENT_EPUB_SOURCE_TYPE,
                     FolioActivity.EpubSourceType.SD_CARD);
         }
-
         return bundle;
     }
 
