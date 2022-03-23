@@ -2,8 +2,6 @@ package com.folioreader.ui.view
 
 import android.content.Context
 import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -29,18 +27,14 @@ import com.folioreader.model.DisplayUnit
 import com.folioreader.model.HighLight
 import com.folioreader.model.HighlightImpl.HighlightStyle
 import com.folioreader.model.sqlite.HighLightTable
-import com.folioreader.ui.activity.FolioActivity
 import com.folioreader.ui.activity.FolioActivityCallback
 import com.folioreader.ui.fragment.DictionaryFragment
 import com.folioreader.ui.fragment.FolioPageFragment
 import com.folioreader.util.AppUtil
 import com.folioreader.util.HighlightUtil
 import com.folioreader.util.UiUtil
-import dalvik.system.PathClassLoader
 import kotlinx.android.synthetic.main.text_selection.view.*
 import org.json.JSONObject
-import org.springframework.util.ReflectionUtils
-import java.lang.ref.WeakReference
 
 /**
  * @author by mahavir on 3/31/16.
@@ -135,17 +129,17 @@ class FolioWebView : WebView {
         return folioActivityCallback.getBottomDistraction(unit)
     }
 
-    @JavascriptInterface
-    fun getViewportRect(unitString: String): String {
-        val unit = DisplayUnit.valueOf(unitString)
-        val rect = folioActivityCallback.getViewportRect(unit)
-        return UiUtil.rectToDOMRectJson(rect)
-    }
+//    @JavascriptInterface
+//    fun getViewportRect(unitString: String): String {
+//        val unit = DisplayUnit.valueOf(unitString)
+//        val rect = folioActivityCallback.getViewportRect(unit)
+//        return UiUtil.rectToDOMRectJson(rect)
+//    }
 
     @JavascriptInterface
     fun toggleSystemUI() {
         uiHandler.post {
-            folioActivityCallback.toggleSystemUI()
+            folioActivityCallback.onTap()
         }
     }
 
@@ -524,13 +518,13 @@ class FolioWebView : WebView {
         override fun onGetContentRect(mode: ActionMode, view: View, outRect: Rect) {
             Log.d(LOG_TAG, "-> onGetContentRect")
 
-            evaluateJavascript("javascript:getSelectionRect()") { value ->
-                val rectJson = JSONObject(value)
-                setSelectionRect(
-                    rectJson.getInt("left"), rectJson.getInt("top"),
-                    rectJson.getInt("right"), rectJson.getInt("bottom")
-                )
-            }
+//            evaluateJavascript("javascript:getSelectionRect()") { value ->
+//                val rectJson = JSONObject(value)
+//                setSelectionRect(
+//                    rectJson.getInt("left"), rectJson.getInt("top"),
+//                    rectJson.getInt("right"), rectJson.getInt("bottom")
+//                )
+//            }
         }
     }
 
@@ -664,102 +658,102 @@ class FolioWebView : WebView {
         currentSelectionRect.bottom = (bottom * density).toInt()
         Log.d(LOG_TAG, "-> setSelectionRect -> $currentSelectionRect")
 
-        computeTextSelectionRect(currentSelectionRect)
-        uiHandler.post { showTextSelectionPopup() }
+//        computeTextSelectionRect(currentSelectionRect)
+//        uiHandler.post { showTextSelectionPopup() }
     }
 
-    private fun computeTextSelectionRect(currentSelectionRect: Rect) {
-        Log.v(LOG_TAG, "-> computeTextSelectionRect")
-
-        val viewportRect = folioActivityCallback.getViewportRect(DisplayUnit.PX)
-        Log.d(LOG_TAG, "-> viewportRect -> $viewportRect")
-
-        if (!Rect.intersects(viewportRect, currentSelectionRect)) {
-            Log.i(LOG_TAG, "-> currentSelectionRect doesn't intersects viewportRect")
-            uiHandler.post {
-                popupWindow.dismiss()
-                uiHandler.removeCallbacks(isScrollingRunnable)
-            }
-            return
-        }
-        Log.i(LOG_TAG, "-> currentSelectionRect intersects viewportRect")
-
-        if (selectionRect == currentSelectionRect) {
-            Log.i(
-                LOG_TAG, "-> setSelectionRect -> currentSelectionRect is equal to previous " +
-                        "selectionRect so no need to computeTextSelectionRect and show popupWindow again"
-            )
-            return
-        }
-
-        Log.i(
-            LOG_TAG, "-> setSelectionRect -> currentSelectionRect is not equal to previous " +
-                    "selectionRect so computeTextSelectionRect and show popupWindow"
-        )
-        selectionRect = currentSelectionRect
-
-        val aboveSelectionRect = Rect(viewportRect)
-        aboveSelectionRect.bottom = selectionRect.top - (8 * density).toInt()
-        val belowSelectionRect = Rect(viewportRect)
-        belowSelectionRect.top = selectionRect.bottom + handleHeight
-
-        //Log.d(LOG_TAG, "-> aboveSelectionRect -> " + aboveSelectionRect);
-        //Log.d(LOG_TAG, "-> belowSelectionRect -> " + belowSelectionRect);
-
-        // Priority to show popupWindow will be as following -
-        // 1. Show popupWindow below selectionRect, if space available
-        // 2. Show popupWindow above selectionRect, if space available
-        // 3. Show popupWindow in the middle of selectionRect
-
-        //popupRect initialisation for belowSelectionRect
-        popupRect.left = viewportRect.left
-        popupRect.top = belowSelectionRect.top
-        popupRect.right = popupRect.left + viewTextSelection.measuredWidth
-        popupRect.bottom = popupRect.top + viewTextSelection.measuredHeight
-        //Log.d(LOG_TAG, "-> Pre decision popupRect -> " + popupRect);
-
-        val popupY: Int
-        if (belowSelectionRect.contains(popupRect)) {
-            Log.i(LOG_TAG, "-> show below")
-            popupY = belowSelectionRect.top
-
-        } else {
-
-            // popupRect initialisation for aboveSelectionRect
-            popupRect.top = aboveSelectionRect.top
-            popupRect.bottom = popupRect.top + viewTextSelection.measuredHeight
-
-            if (aboveSelectionRect.contains(popupRect)) {
-                Log.i(LOG_TAG, "-> show above")
-                popupY = aboveSelectionRect.bottom - popupRect.height()
-
-            } else {
-
-                Log.i(LOG_TAG, "-> show in middle")
-                val popupYDiff = (viewTextSelection.measuredHeight - selectionRect.height()) / 2
-                popupY = selectionRect.top - popupYDiff
-            }
-        }
-
-        val popupXDiff = (viewTextSelection.measuredWidth - selectionRect.width()) / 2
-        val popupX = selectionRect.left - popupXDiff
-
-        popupRect.offsetTo(popupX, popupY)
-        //Log.d(LOG_TAG, "-> Post decision popupRect -> " + popupRect);
-
-        // Check if popupRect left side is going outside of the viewportRect
-        if (popupRect.left < viewportRect.left) {
-            popupRect.right += 0 - popupRect.left
-            popupRect.left = 0
-        }
-
-        // Check if popupRect right side is going outside of the viewportRect
-        if (popupRect.right > viewportRect.right) {
-            val dx = popupRect.right - viewportRect.right
-            popupRect.left -= dx
-            popupRect.right -= dx
-        }
-    }
+//    private fun computeTextSelectionRect(currentSelectionRect: Rect) {
+//        Log.v(LOG_TAG, "-> computeTextSelectionRect")
+//
+//        val viewportRect = folioActivityCallback.getViewportRect(DisplayUnit.PX)
+//        Log.d(LOG_TAG, "-> viewportRect -> $viewportRect")
+//
+//        if (!Rect.intersects(viewportRect, currentSelectionRect)) {
+//            Log.i(LOG_TAG, "-> currentSelectionRect doesn't intersects viewportRect")
+//            uiHandler.post {
+//                popupWindow.dismiss()
+//                uiHandler.removeCallbacks(isScrollingRunnable)
+//            }
+//            return
+//        }
+//        Log.i(LOG_TAG, "-> currentSelectionRect intersects viewportRect")
+//
+//        if (selectionRect == currentSelectionRect) {
+//            Log.i(
+//                LOG_TAG, "-> setSelectionRect -> currentSelectionRect is equal to previous " +
+//                        "selectionRect so no need to computeTextSelectionRect and show popupWindow again"
+//            )
+//            return
+//        }
+//
+//        Log.i(
+//            LOG_TAG, "-> setSelectionRect -> currentSelectionRect is not equal to previous " +
+//                    "selectionRect so computeTextSelectionRect and show popupWindow"
+//        )
+//        selectionRect = currentSelectionRect
+//
+//        val aboveSelectionRect = Rect(viewportRect)
+//        aboveSelectionRect.bottom = selectionRect.top - (8 * density).toInt()
+//        val belowSelectionRect = Rect(viewportRect)
+//        belowSelectionRect.top = selectionRect.bottom + handleHeight
+//
+//        //Log.d(LOG_TAG, "-> aboveSelectionRect -> " + aboveSelectionRect);
+//        //Log.d(LOG_TAG, "-> belowSelectionRect -> " + belowSelectionRect);
+//
+//        // Priority to show popupWindow will be as following -
+//        // 1. Show popupWindow below selectionRect, if space available
+//        // 2. Show popupWindow above selectionRect, if space available
+//        // 3. Show popupWindow in the middle of selectionRect
+//
+//        //popupRect initialisation for belowSelectionRect
+//        popupRect.left = viewportRect.left
+//        popupRect.top = belowSelectionRect.top
+//        popupRect.right = popupRect.left + viewTextSelection.measuredWidth
+//        popupRect.bottom = popupRect.top + viewTextSelection.measuredHeight
+//        //Log.d(LOG_TAG, "-> Pre decision popupRect -> " + popupRect);
+//
+//        val popupY: Int
+//        if (belowSelectionRect.contains(popupRect)) {
+//            Log.i(LOG_TAG, "-> show below")
+//            popupY = belowSelectionRect.top
+//
+//        } else {
+//
+//            // popupRect initialisation for aboveSelectionRect
+//            popupRect.top = aboveSelectionRect.top
+//            popupRect.bottom = popupRect.top + viewTextSelection.measuredHeight
+//
+//            if (aboveSelectionRect.contains(popupRect)) {
+//                Log.i(LOG_TAG, "-> show above")
+//                popupY = aboveSelectionRect.bottom - popupRect.height()
+//
+//            } else {
+//
+//                Log.i(LOG_TAG, "-> show in middle")
+//                val popupYDiff = (viewTextSelection.measuredHeight - selectionRect.height()) / 2
+//                popupY = selectionRect.top - popupYDiff
+//            }
+//        }
+//
+//        val popupXDiff = (viewTextSelection.measuredWidth - selectionRect.width()) / 2
+//        val popupX = selectionRect.left - popupXDiff
+//
+//        popupRect.offsetTo(popupX, popupY)
+//        //Log.d(LOG_TAG, "-> Post decision popupRect -> " + popupRect);
+//
+//        // Check if popupRect left side is going outside of the viewportRect
+//        if (popupRect.left < viewportRect.left) {
+//            popupRect.right += 0 - popupRect.left
+//            popupRect.left = 0
+//        }
+//
+//        // Check if popupRect right side is going outside of the viewportRect
+//        if (popupRect.right > viewportRect.right) {
+//            val dx = popupRect.right - viewportRect.right
+//            popupRect.left -= dx
+//            popupRect.right -= dx
+//        }
+//    }
 
     private fun showTextSelectionPopup() {
         Log.v(LOG_TAG, "-> showTextSelectionPopup")

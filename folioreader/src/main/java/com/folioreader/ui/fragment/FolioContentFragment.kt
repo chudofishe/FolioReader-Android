@@ -125,6 +125,7 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         val path = FileUtil.saveEpubFileAndLoadLazyBook(requireContext(), mEpubSourceType, mEpubFilePath,
             mEpubRawId, bookFileName
         )
+//        val path = mEpubFilePath
         val extension: Publication.EXTENSION
         var extensionString: String? = null
         try {
@@ -356,13 +357,15 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         }
     }
 
+
+
     override fun storeLastReadLocator(lastReadLocator: ReadLocator?) {
         Log.v(FolioActivity.LOG_TAG, "-> storeLastReadLocator")
         this.lastReadLocator = lastReadLocator
     }
 
-    override fun toggleSystemUI() {
-        TODO("Not yet implemented")
+    override fun onTap() {
+
     }
 
     override fun setDayMode() {
@@ -381,8 +384,9 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         TODO("Not yet implemented")
     }
 
-    override fun getViewportRect(unit: DisplayUnit?): Rect {
-        TODO("Not yet implemented")
-    }
+//    override fun getViewportRect(unit: DisplayUnit?): Rect {
+//        TODO("Not yet implemented")
+//
+//    }
 
 }

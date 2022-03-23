@@ -663,31 +663,31 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         return viewportRect
     }
 
-    override fun getViewportRect(unit: DisplayUnit): Rect {
-
-        val viewportRect = computeViewportRect()
-        when (unit) {
-            DisplayUnit.PX -> return viewportRect
-
-            DisplayUnit.DP -> {
-                viewportRect.left /= density.toInt()
-                viewportRect.top /= density.toInt()
-                viewportRect.right /= density.toInt()
-                viewportRect.bottom /= density.toInt()
-                return viewportRect
-            }
-
-            DisplayUnit.CSS_PX -> {
-                viewportRect.left = Math.ceil((viewportRect.left / density).toDouble()).toInt()
-                viewportRect.top = Math.ceil((viewportRect.top / density).toDouble()).toInt()
-                viewportRect.right = Math.ceil((viewportRect.right / density).toDouble()).toInt()
-                viewportRect.bottom = Math.ceil((viewportRect.bottom / density).toDouble()).toInt()
-                return viewportRect
-            }
-
-            else -> throw IllegalArgumentException("-> Illegal argument -> unit = $unit")
-        }
-    }
+//    override fun getViewportRect(unit: DisplayUnit): Rect {
+//
+//        val viewportRect = computeViewportRect()
+//        when (unit) {
+//            DisplayUnit.PX -> return viewportRect
+//
+//            DisplayUnit.DP -> {
+//                viewportRect.left /= density.toInt()
+//                viewportRect.top /= density.toInt()
+//                viewportRect.right /= density.toInt()
+//                viewportRect.bottom /= density.toInt()
+//                return viewportRect
+//            }
+//
+//            DisplayUnit.CSS_PX -> {
+//                viewportRect.left = Math.ceil((viewportRect.left / density).toDouble()).toInt()
+//                viewportRect.top = Math.ceil((viewportRect.top / density).toDouble()).toInt()
+//                viewportRect.right = Math.ceil((viewportRect.right / density).toDouble()).toInt()
+//                viewportRect.bottom = Math.ceil((viewportRect.bottom / density).toDouble()).toInt()
+//                return viewportRect
+//            }
+//
+//            else -> throw IllegalArgumentException("-> Illegal argument -> unit = $unit")
+//        }
+//    }
 
     override fun onSystemUiVisibilityChange(visibility: Int) {
         Log.v(LOG_TAG, "-> onSystemUiVisibilityChange -> visibility = $visibility")
@@ -704,7 +704,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         }
     }
 
-    override fun toggleSystemUI() {
+    override fun onTap() {
 
         if (distractionFreeMode) {
             showSystemUI()
