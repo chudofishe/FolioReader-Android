@@ -178,6 +178,8 @@ class FolioPageFragment : Fragment(),
         initWebView()
         updatePagesLeftTextBg()
 
+        lastReadLocator = ReadLocator(mBookId!!, spineItem.href ?: "", Date().time, Locations())
+
         return mRootView
     }
 
@@ -606,20 +608,22 @@ class FolioPageFragment : Fragment(),
     @JavascriptInterface
     fun storeLastReadCfi(cfi: String) {
 
-        synchronized(this) {
+//        synchronized(this) {
             var href = spineItem.href
             if (href == null) href = ""
             val created = Date().time
             val locations = Locations()
             locations.cfi = cfi
-            lastReadLocator = ReadLocator(mBookId!!, href, created, locations)
-
+            val newLocator = ReadLocator(mBookId!!, href, created, locations)
+            if (newLocator != null) {
+                lastReadLocator = newLocator
+            }
             val intent = Intent(FolioReader.ACTION_SAVE_READ_LOCATOR)
             intent.putExtra(FolioReader.EXTRA_READ_LOCATOR, lastReadLocator as Parcelable?)
             LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
 
             (this as java.lang.Object).notify()
-        }
+//        }
     }
 
     @JavascriptInterface
