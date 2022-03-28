@@ -31,7 +31,7 @@ public interface FolioActivityCallback {
 
     int getBottomDistraction(final DisplayUnit unit);
 
-//    Rect getViewportRect(final DisplayUnit unit);
+    Rect getViewportRect(final DisplayUnit unit);
 
     String getStreamerUrl();
 }

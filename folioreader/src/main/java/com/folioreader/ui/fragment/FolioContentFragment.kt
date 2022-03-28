@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -58,6 +59,8 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
     private var searchLocator: SearchLocator? = null
     private var entryReadLocator: ReadLocator? = null
     private var lastReadLocator: ReadLocator? = null
+    private var density: Float = 0.toFloat()
+    private var displayMetrics: DisplayMetrics? = null
 
 
 
@@ -84,6 +87,11 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
             entryReadLocator = it.getParcelable(FolioActivity.EXTRA_READ_LOCATOR)
             setConfig(it)
         }
+
+        val display = requireActivity().windowManager.defaultDisplay
+        displayMetrics = resources.displayMetrics
+        display.getRealMetrics(displayMetrics)
+        density = displayMetrics!!.density
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -384,9 +392,33 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         TODO("Not yet implemented")
     }
 
-//    override fun getViewportRect(unit: DisplayUnit?): Rect {
-//        TODO("Not yet implemented")
-//
-//    }
+    override fun getViewportRect(unit: DisplayUnit?): Rect {
+        val viewportRect = computeViewportRect()
+        when (unit) {
+            DisplayUnit.PX -> return viewportRect
+
+            DisplayUnit.DP -> {
+                viewportRect.left /= density.toInt()
+                viewportRect.top /= density.toInt()
+                viewportRect.right /= density.toInt()
+                viewportRect.bottom /= density.toInt()
+                return viewportRect
+            }
+
+            DisplayUnit.CSS_PX -> {
+                viewportRect.left = Math.ceil((viewportRect.left / density).toDouble()).toInt()
+                viewportRect.top = Math.ceil((viewportRect.top / density).toDouble()).toInt()
+                viewportRect.right = Math.ceil((viewportRect.right / density).toDouble()).toInt()
+                viewportRect.bottom = Math.ceil((viewportRect.bottom / density).toDouble()).toInt()
+                return viewportRect
+            }
+
+            else -> throw IllegalArgumentException("-> Illegal argument -> unit = $unit")
+        }
+    }
+
+    private fun computeViewportRect(): Rect {
+        return Rect()
+    }
 
 }
