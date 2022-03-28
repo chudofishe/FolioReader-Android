@@ -608,7 +608,7 @@ class FolioPageFragment : Fragment(),
     @JavascriptInterface
     fun storeLastReadCfi(cfi: String) {
 
-//        synchronized(this) {
+        synchronized(this) {
             var href = spineItem.href
             if (href == null) href = ""
             val created = Date().time
@@ -623,7 +623,7 @@ class FolioPageFragment : Fragment(),
             LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
 
             (this as java.lang.Object).notify()
-//        }
+        }
     }
 
     @JavascriptInterface
