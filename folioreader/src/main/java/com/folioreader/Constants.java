@@ -25,6 +25,12 @@ public class Constants {
     public static final int FONT_LATO = 2;
     public static final int FONT_LORA = 3;
     public static final int FONT_RALEWAY = 4;
+    public static final int FONT_ARIAL = 5;
+    public static final int FONT_GEORGIA = 6;
+    public static final int FONT_IOWAN_OLD_STYLE = 7;
+    public static final int FONT_SF_PRO_DISPLAY = 8;
+    public static final int FONT_TIMES_NEW_ROMAN = 9;
+    public static final int FONT_VERDANA = 10;
     public static final String DATE_FORMAT = "MMM dd, yyyy | HH:mm";
     public static final String ASSET = "file:///android_asset/";
     public static final int WRITE_EXTERNAL_STORAGE_REQUEST = 102;

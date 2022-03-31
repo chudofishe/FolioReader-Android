@@ -249,6 +249,36 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
     src: url('file:///android_asset/fonts/raleway/Raleway-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'arial';
+    src: url('file:///android_asset/fonts/arial/Arial.ttf');
+}
+
+@font-face {
+    font-family: 'georgia';
+    src: url('file:///android_asset/fonts/georgia/Georgia.ttf');
+}
+
+@font-face {
+    font-family: 'verdana';
+    src: url('file:///android_asset/fonts/verdana/Verdana.ttf');
+}
+
+@font-face {
+    font-family: 'times_new_roman';
+    src: url('file:///android_asset/fonts/times_new_roman/Times-New-Roman.ttf');
+}
+
+@font-face {
+    font-family: 'sf_pro_display';
+    src: url('file:///android_asset/fonts/sf_pro_display/Sf-Pro-Display.ttf');
+}
+
+@font-face {
+    font-family: 'iowan_old_style';
+    src: url('file:///android_asset/fonts/iowan_old_style/Iowan-Old-Style.ttf');
+}
+
 .andada {
      font-family: "andada", sans-serif;
  }
@@ -261,12 +291,38 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
 .raleway {
      font-family: "raleway", sans-serif;
  }
+.arial {
+     font-family: "arial", serif;
+ }
+.georgia {
+     font-family: "georgia", serif;
+ }
+.iowan_old_style {
+     font-family: "iowan_old_style", serif;
+ }
+.sf_pro_display {
+     font-family: "sf_pro_display", serif;
+ }
+.times_new_roman {
+     font-family: "times_new_roman", serif;
+ }
+.verdana {
+     font-family: "verdana", serif;
+ }
 
-html.textSizeOne { font-size: 13px !important; }
-html.textSizeTwo { font-size: 15px !important; }
-html.textSizeThree { font-size: 17px !important; }
-html.textSizeFour { font-size: 19px !important; }
-html.textSizeFive { font-size: 21px !important; }
+
+
+
+html.textSizeOne { font-size: 12px !important; }
+html.textSizeTwo { font-size: 13px !important; }
+html.textSizeThree { font-size: 14px !important; }
+html.textSizeFour { font-size: 15px !important; }
+html.textSizeFive { font-size: 16px !important; }
+html.textSizeSix { font-size: 17px !important; }
+html.textSizeSeven { font-size: 18px !important; }
+html.textSizeEight { font-size: 19px !important; }
+html.textSizeNine { font-size: 20px !important; }
+html.textSizeTen { font-size: 21px !important; }
 
 h1 {
     font-size: 2rem;

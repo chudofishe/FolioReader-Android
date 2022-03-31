@@ -61,6 +61,24 @@ public final class HtmlUtil {
 
         String classes = "";
         switch (config.getFont()) {
+            case Constants.FONT_ARIAL:
+                classes = "arial";
+                break;
+            case Constants.FONT_GEORGIA:
+                classes = "georgia";
+                break;
+            case Constants.FONT_IOWAN_OLD_STYLE:
+                classes = "iowan_old_style";
+                break;
+            case Constants.FONT_SF_PRO_DISPLAY:
+                classes = "sf_pro_display";
+                break;
+            case Constants.FONT_TIMES_NEW_ROMAN:
+                classes = "times_new_roman";
+                break;
+            case Constants.FONT_VERDANA:
+                classes = "verdana";
+                break;
             case Constants.FONT_ANDADA:
                 classes = "andada";
                 break;
@@ -96,6 +114,21 @@ public final class HtmlUtil {
                 break;
             case 4:
                 classes += " textSizeFive";
+                break;
+            case 5:
+                classes += " textSizeSix";
+                break;
+            case 6:
+                classes += " textSizeSeven";
+                break;
+            case 7:
+                classes += " textSizeEight";
+                break;
+            case 8:
+                classes += " textSizeNine";
+                break;
+            case 9:
+                classes += " textSizeTen";
                 break;
             default:
                 break;

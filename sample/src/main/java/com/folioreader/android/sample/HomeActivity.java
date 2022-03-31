@@ -105,8 +105,8 @@ public class HomeActivity extends AppCompatActivity
         Config config = new Config()
                 .setAllowedDirection(Config.AllowedDirection.ONLY_HORIZONTAL)
                 .setDirection(Config.Direction.HORIZONTAL)
-                .setFont(Constants.FONT_LORA)
-                .setFontSize(2);
+                .setFont(Constants.FONT_SF_PRO_DISPLAY)
+                .setFontSize(9);
 
 //        Config config = AppUtil.getSavedConfig(getApplicationContext());
 //        if (config == null)
