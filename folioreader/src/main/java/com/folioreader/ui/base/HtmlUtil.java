@@ -101,34 +101,40 @@ public final class HtmlUtil {
 
         switch (config.getFontSize()) {
             case 0:
-                classes += " textSizeOne";
+                classes += " textSize0";
                 break;
             case 1:
-                classes += " textSizeTwo";
+                classes += " textSize1";
                 break;
             case 2:
-                classes += " textSizeThree";
+                classes += " textSize2";
                 break;
             case 3:
-                classes += " textSizeFour";
+                classes += " textSize3";
                 break;
             case 4:
-                classes += " textSizeFive";
+                classes += " textSize4";
                 break;
             case 5:
-                classes += " textSizeSix";
+                classes += " textSize5";
                 break;
             case 6:
-                classes += " textSizeSeven";
+                classes += " textSize6";
                 break;
             case 7:
-                classes += " textSizeEight";
+                classes += " textSize7";
                 break;
             case 8:
-                classes += " textSizeNine";
+                classes += " textSize8";
                 break;
             case 9:
-                classes += " textSizeTen";
+                classes += " textSize9";
+                break;
+            case 10:
+                classes += " textSize10";
+                break;
+            case 11:
+                classes += " textSize11";
                 break;
             default:
                 break;

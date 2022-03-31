@@ -313,16 +313,18 @@ html.nightMode .highlight_underline {border-bottom: 2px solid rgba(240, 40, 20, 
 
 
 
-html.textSizeOne { font-size: 12px !important; }
-html.textSizeTwo { font-size: 13px !important; }
-html.textSizeThree { font-size: 14px !important; }
-html.textSizeFour { font-size: 15px !important; }
-html.textSizeFive { font-size: 16px !important; }
-html.textSizeSix { font-size: 17px !important; }
-html.textSizeSeven { font-size: 18px !important; }
-html.textSizeEight { font-size: 19px !important; }
-html.textSizeNine { font-size: 20px !important; }
-html.textSizeTen { font-size: 21px !important; }
+html.textSize0 { font-size: 11px !important; }
+html.textSize1 { font-size: 12px !important; }
+html.textSize2 { font-size: 13px !important; }
+html.textSize3 { font-size: 14px !important; }
+html.textSize4 { font-size: 15px !important; }
+html.textSize5 { font-size: 16px !important; }
+html.textSize6 { font-size: 17px !important; }
+html.textSize7 { font-size: 18px !important; }
+html.textSize8 { font-size: 19px !important; }
+html.textSize9 { font-size: 20px !important; }
+html.textSize10 { font-size: 21px !important; }
+html.textSize11 { font-size: 22px !important; }
 
 h1 {
     font-size: 2rem;
