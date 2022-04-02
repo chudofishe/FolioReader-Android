@@ -216,6 +216,84 @@ html.nightMode {
     color: #848484 !important;
 }
 
+/*
+ *
+ * colorModeYellow
+ *
+ */
+
+html.colorModeYellow {
+    background-color: #D4C69F !important;
+}
+
+.colorModeYellow p, .colorModeYellow div {
+    color: #5A5A5C !important;
+    background-color: transparent !important;
+}
+
+.colorModeYellow h1, .colorModeYellow h2, .colorModeYellow h3, .colorModeYellow h4, .colorModeYellow h5, .colorModeYellow h6 {
+    color: #848484 !important;
+}
+
+/*
+ *
+ * colorModeGray
+ *
+ */
+
+html.colorModeGray {
+    background-color: #5A5A5C !important;
+}
+
+.colorModeGray p, .colorModeGray div {
+    color: #FFFFFF !important;
+    background-color: transparent !important;
+}
+
+.colorModeGray h1, .colorModeGray h2, .colorModeGray h3, .colorModeGray h4, .colorModeGray h5, .colorModeGray h6 {
+    color: #848484 !important;
+}
+
+/*
+ *
+ * colorModeDark
+ *
+ */
+
+html.colorModeDark {
+    background-color: #343434 !important;
+}
+
+.colorModeDark p, .colorModeDark div {
+    color: #D1D1D1 !important;
+    background-color: transparent !important;
+}
+
+.colorModeDark h1, .colorModeDark h2, .colorModeDark h3, .colorModeDark h4, .colorModeDark h5, .colorModeDark h6 {
+    color: #848484 !important;
+}
+
+/*
+ *
+ * colorModeLight
+ *
+ */
+
+html.colorModeLight {
+    background-color: #FFFFFF !important;
+}
+
+.colorModeLight p, .colorModeLight div {
+    color: #000000 !important;
+    background-color: transparent !important;
+}
+
+.colorModeLight h1, .colorModeLight h2, .colorModeLight h3, .colorModeLight h4, .colorModeLight h5, .colorModeLight h6 {
+    color: #848484 !important;
+}
+
+
+
 html.nightMode .highlight_yellow {background:rgba(255, 235, 107, 0.9)}
 html.nightMode .highlight_green {background:rgba(192, 237, 114, 0.9)}
 html.nightMode .highlight_blue {background:rgba(173, 216, 255, 0.9)}

@@ -25,15 +25,19 @@ public class Config implements Parcelable {
     public static final String CONFIG_IS_TTS = "is_tts";
     public static final String CONFIG_ALLOWED_DIRECTION = "allowed_direction";
     public static final String CONFIG_DIRECTION = "direction";
+    public static final String CONFIG_COLOR_MODE = "colorMode";
     private static final AllowedDirection DEFAULT_ALLOWED_DIRECTION = AllowedDirection.ONLY_VERTICAL;
     private static final Direction DEFAULT_DIRECTION = Direction.VERTICAL;
     private static final int DEFAULT_THEME_COLOR_INT =
             ContextCompat.getColor(AppContext.get(), R.color.default_theme_accent_color);
 
-    private int font = 3;
+    private Font font = Font.TIMES_NEW_ROMAN;
     private int fontSize = 2;
     private boolean nightMode;
+    //Color mode for webView reader: current color themes: colorModeYellow,colorModeGray,colorModeDark,colorModeLight
+    private ColorMode colorMode = ColorMode.LIGHT;
     @ColorInt
+    //idk what is this for
     private int themeColor = DEFAULT_THEME_COLOR_INT;
     private boolean showTts = true;
     private AllowedDirection allowedDirection = DEFAULT_ALLOWED_DIRECTION;
@@ -51,6 +55,20 @@ public class Config implements Parcelable {
      */
     public enum Direction {
         VERTICAL, HORIZONTAL
+    }
+
+    /**
+     * Reader color modes
+     */
+    public enum ColorMode {
+        YELLOW, GRAY, DARK, LIGHT
+    }
+
+    /**
+     * Reader text font
+     */
+    public enum Font {
+        ARIAL, GEORGIA, IOWAN_OLD_STYLE, SF_PRO_DISPLAY, TIMES_NEW_ROMAN, VERDANA
     }
 
     public static final Creator<Config> CREATOR = new Creator<Config>() {
@@ -72,30 +90,32 @@ public class Config implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(font);
+        dest.writeString(font.toString());
         dest.writeInt(fontSize);
         dest.writeByte((byte) (nightMode ? 1 : 0));
         dest.writeInt(themeColor);
         dest.writeByte((byte) (showTts ? 1 : 0));
         dest.writeString(allowedDirection.toString());
         dest.writeString(direction.toString());
+        dest.writeString(colorMode.toString());
     }
 
     protected Config(Parcel in) {
-        font = in.readInt();
+        font = getFontFromString(LOG_TAG, in.readString());
         fontSize = in.readInt();
         nightMode = in.readByte() != 0;
         themeColor = in.readInt();
         showTts = in.readByte() != 0;
         allowedDirection = getAllowedDirectionFromString(LOG_TAG, in.readString());
         direction = getDirectionFromString(LOG_TAG, in.readString());
+        colorMode = getColorModeFromString(LOG_TAG, in.readString());
     }
 
     public Config() {
     }
 
     public Config(JSONObject jsonObject) {
-        font = jsonObject.optInt(CONFIG_FONT);
+        font = getFontFromString(LOG_TAG, jsonObject.optString(CONFIG_FONT));
         fontSize = jsonObject.optInt(CONFIG_FONT_SIZE);
         nightMode = jsonObject.optBoolean(CONFIG_IS_NIGHT_MODE);
         themeColor = getValidColorInt(jsonObject.optInt(CONFIG_THEME_COLOR_INT));
@@ -103,6 +123,7 @@ public class Config implements Parcelable {
         allowedDirection = getAllowedDirectionFromString(LOG_TAG,
                 jsonObject.optString(CONFIG_ALLOWED_DIRECTION));
         direction = getDirectionFromString(LOG_TAG, jsonObject.optString(CONFIG_DIRECTION));
+        colorMode = getColorModeFromString(LOG_TAG, jsonObject.optString(CONFIG_COLOR_MODE));
     }
 
     public static Direction getDirectionFromString(final String LOG_TAG, String directionString) {
@@ -116,6 +137,46 @@ public class Config implements Parcelable {
                 Log.w(LOG_TAG, "-> Illegal argument directionString = `" + directionString
                         + "`, defaulting direction to " + DEFAULT_DIRECTION);
                 return DEFAULT_DIRECTION;
+        }
+    }
+
+    public static ColorMode getColorModeFromString(final String LOG_TAG, String colorModeString) {
+
+        switch (colorModeString) {
+            case "YELLOW":
+                return ColorMode.YELLOW;
+            case "GRAY":
+                return ColorMode.GRAY;
+            case "DARK":
+                return ColorMode.DARK;
+            case "LIGHT":
+                return ColorMode.LIGHT;
+            default:
+                Log.w(LOG_TAG, "-> Illegal argument colorModeString = `" + colorModeString
+                        + "`, set deafult colorMode to " + ColorMode.LIGHT);
+                return ColorMode.LIGHT;
+        }
+    }
+
+    public static Font getFontFromString(final String LOG_TAG, String font) {
+
+        switch (font) {
+            case "ARIAL":
+                return Font.ARIAL;
+            case "GEORGIA":
+                return Font.GEORGIA;
+            case "IOWAN_OLD_STYLE":
+                return Font.IOWAN_OLD_STYLE;
+            case "SF_PRO_DISPLAY":
+                return Font.SF_PRO_DISPLAY;
+            case "TIMES_NEW_ROMAN":
+                return Font.TIMES_NEW_ROMAN;
+            case "VERDANA":
+                return Font.VERDANA;
+            default:
+                Log.w(LOG_TAG, "-> Illegal argument font = `" + font
+                        + "`, set deafult font to " + Font.TIMES_NEW_ROMAN);
+                return Font.TIMES_NEW_ROMAN;
         }
     }
 
@@ -137,13 +198,22 @@ public class Config implements Parcelable {
         }
     }
 
-    public int getFont() {
+    public Font getFont() {
         return font;
     }
 
-    public Config setFont(int font) {
+    public Config setFont(Font font) {
         this.font = font;
         return this;
+    }
+
+    public Config setColorMode(ColorMode colorMode) {
+        this.colorMode = colorMode;
+        return this;
+    }
+
+    public ColorMode getColorMode() {
+        return colorMode;
     }
 
     public int getFontSize() {

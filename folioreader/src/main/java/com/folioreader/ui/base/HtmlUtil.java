@@ -61,35 +61,23 @@ public final class HtmlUtil {
 
         String classes = "";
         switch (config.getFont()) {
-            case Constants.FONT_ARIAL:
+            case ARIAL:
                 classes = "arial";
                 break;
-            case Constants.FONT_GEORGIA:
+            case GEORGIA:
                 classes = "georgia";
                 break;
-            case Constants.FONT_IOWAN_OLD_STYLE:
+            case IOWAN_OLD_STYLE:
                 classes = "iowan_old_style";
                 break;
-            case Constants.FONT_SF_PRO_DISPLAY:
+            case SF_PRO_DISPLAY:
                 classes = "sf_pro_display";
                 break;
-            case Constants.FONT_TIMES_NEW_ROMAN:
+            case TIMES_NEW_ROMAN:
                 classes = "times_new_roman";
                 break;
-            case Constants.FONT_VERDANA:
+            case VERDANA:
                 classes = "verdana";
-                break;
-            case Constants.FONT_ANDADA:
-                classes = "andada";
-                break;
-            case Constants.FONT_LATO:
-                classes = "lato";
-                break;
-            case Constants.FONT_LORA:
-                classes = "lora";
-                break;
-            case Constants.FONT_RALEWAY:
-                classes = "raleway";
                 break;
             default:
                 break;
@@ -97,6 +85,23 @@ public final class HtmlUtil {
 
         if (config.isNightMode()) {
             classes += " nightMode";
+        }
+
+        switch (config.getColorMode()) {
+            case YELLOW:
+                classes += " colorModeYellow";
+                break;
+            case GRAY:
+                classes += " colorModeGray";
+                break;
+            case DARK:
+                classes += " colorModeDark";
+                break;
+            case LIGHT:
+                classes += " colorModeLight";
+                break;
+            default:
+                break;
         }
 
         switch (config.getFontSize()) {
