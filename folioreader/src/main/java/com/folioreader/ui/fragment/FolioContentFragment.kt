@@ -62,6 +62,8 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
     private var density: Float = 0.toFloat()
     private var displayMetrics: DisplayMetrics? = null
 
+    private lateinit var config: Config
+
 
 
     private val currentFragment: FolioPageFragment?
@@ -172,7 +174,10 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
 
         val publication = pubBox!!.publication
         spine = publication.readingOrder
-
+        if (config.isIgnoreFirstChapter) {
+            spine = spine!!.drop(1)
+        }
+        spine!!.forEach { Log.d(FolioActivity.LOG_TAG, it.href) }
         if (mBookId == null) {
             mBookId = if (!publication.metadata.identifier.isEmpty()) {
                 publication.metadata.identifier
@@ -284,6 +289,8 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
                 savedConfig
             }
         }
+
+        this.config = config
 
         AppUtil.saveConfig(requireContext(), config)
         direction = config.direction

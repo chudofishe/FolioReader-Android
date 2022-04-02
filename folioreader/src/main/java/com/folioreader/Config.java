@@ -26,6 +26,7 @@ public class Config implements Parcelable {
     public static final String CONFIG_ALLOWED_DIRECTION = "allowed_direction";
     public static final String CONFIG_DIRECTION = "direction";
     public static final String CONFIG_COLOR_MODE = "colorMode";
+    public static final String CONFIG_IS_IGNORE_FIRST_CHAPTER = "ignoreFirstChapter";
     private static final AllowedDirection DEFAULT_ALLOWED_DIRECTION = AllowedDirection.ONLY_VERTICAL;
     private static final Direction DEFAULT_DIRECTION = Direction.VERTICAL;
     private static final int DEFAULT_THEME_COLOR_INT =
@@ -34,6 +35,7 @@ public class Config implements Parcelable {
     private Font font = Font.TIMES_NEW_ROMAN;
     private int fontSize = 2;
     private boolean nightMode;
+    private boolean ignoreFirstChapter = true;
     //Color mode for webView reader: current color themes: colorModeYellow,colorModeGray,colorModeDark,colorModeLight
     private ColorMode colorMode = ColorMode.LIGHT;
     @ColorInt
@@ -98,6 +100,7 @@ public class Config implements Parcelable {
         dest.writeString(allowedDirection.toString());
         dest.writeString(direction.toString());
         dest.writeString(colorMode.toString());
+        dest.writeByte((byte) (ignoreFirstChapter ? 1 : 0));
     }
 
     protected Config(Parcel in) {
@@ -109,6 +112,7 @@ public class Config implements Parcelable {
         allowedDirection = getAllowedDirectionFromString(LOG_TAG, in.readString());
         direction = getDirectionFromString(LOG_TAG, in.readString());
         colorMode = getColorModeFromString(LOG_TAG, in.readString());
+        ignoreFirstChapter = in.readByte() != 0;
     }
 
     public Config() {
@@ -124,6 +128,7 @@ public class Config implements Parcelable {
                 jsonObject.optString(CONFIG_ALLOWED_DIRECTION));
         direction = getDirectionFromString(LOG_TAG, jsonObject.optString(CONFIG_DIRECTION));
         colorMode = getColorModeFromString(LOG_TAG, jsonObject.optString(CONFIG_COLOR_MODE));
+        ignoreFirstChapter = jsonObject.optBoolean(CONFIG_IS_IGNORE_FIRST_CHAPTER);
     }
 
     public static Direction getDirectionFromString(final String LOG_TAG, String directionString) {
@@ -210,6 +215,15 @@ public class Config implements Parcelable {
     public Config setColorMode(ColorMode colorMode) {
         this.colorMode = colorMode;
         return this;
+    }
+
+    public Config setIgnoreFirstChapter(boolean ignoreFirstChapter) {
+        this.ignoreFirstChapter = ignoreFirstChapter;
+        return this;
+    }
+
+    public boolean isIgnoreFirstChapter() {
+        return ignoreFirstChapter;
     }
 
     public ColorMode getColorMode() {
