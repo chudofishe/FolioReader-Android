@@ -64,6 +64,7 @@ class WebViewPager : ViewPager {
 
             override fun onPageSelected(position: Int) {
                 Log.v(LOG_TAG, "-> onPageSelected -> $position")
+                folioWebView?.onPageChanged(position, horizontalPageCount)
             }
 
             override fun onPageScrollStateChanged(state: Int) {}

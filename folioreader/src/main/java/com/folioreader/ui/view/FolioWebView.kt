@@ -794,4 +794,8 @@ class FolioWebView : WebView {
         if (!destroyed)
             uiHandler.postDelayed(isScrollingRunnable, IS_SCROLLING_CHECK_TIMER.toLong())
     }
+
+    fun onPageChanged(currentPage: Int, totalPages: Int) {
+        folioActivityCallback.onPageChanged(currentPage, totalPages)
+    }
 }

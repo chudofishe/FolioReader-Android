@@ -428,4 +428,8 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         return Rect()
     }
 
+    override fun onPageChanged(currentPage: Int, totalPages: Int) {
+        Log.d("FolioContentFragment", "currentPage: $currentPage, totalPages: $totalPages")
+    }
+
 }

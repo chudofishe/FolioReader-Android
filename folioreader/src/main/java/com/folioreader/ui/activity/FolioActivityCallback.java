@@ -27,6 +27,8 @@ public interface FolioActivityCallback {
 
     void setNightMode();
 
+    void onPageChanged(Integer currentPage, Integer totalPages);
+
     int getTopDistraction(final DisplayUnit unit);
 
     int getBottomDistraction(final DisplayUnit unit);

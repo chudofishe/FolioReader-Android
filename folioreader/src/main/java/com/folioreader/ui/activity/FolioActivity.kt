@@ -355,6 +355,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         toolbar!!.setTitleTextColor(ContextCompat.getColor(this, R.color.night_title_text_color))
     }
 
+    override fun onPageChanged(currentPage: Int?, totalPages: Int?) {
+        Log.d(LOG_TAG, "currentPage: $currentPage, totalPages: $totalPages")
+    }
+
     private fun initMediaController() {
         Log.v(LOG_TAG, "-> initMediaController")
 
