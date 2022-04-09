@@ -43,6 +43,7 @@ public class Config implements Parcelable {
     private int themeColor = DEFAULT_THEME_COLOR_INT;
     private boolean showTts = true;
     private AllowedDirection allowedDirection = DEFAULT_ALLOWED_DIRECTION;
+    private String localPath;
     private Direction direction = DEFAULT_DIRECTION;
 
     /**
@@ -237,6 +238,15 @@ public class Config implements Parcelable {
     public Config setFontSize(int fontSize) {
         this.fontSize = fontSize;
         return this;
+    }
+
+    public Config setLocalPath(String path) {
+        this.localPath = path;
+        return this;
+    }
+
+    public String getLocalPath() {
+        return localPath;
     }
 
     public boolean isNightMode() {
