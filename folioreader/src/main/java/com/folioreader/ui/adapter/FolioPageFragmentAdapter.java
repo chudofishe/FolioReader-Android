@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.folioreader.Config;
+import com.folioreader.ui.fragment.DummyFragment;
 import com.folioreader.ui.fragment.FolioPageFragment;
 import org.readium.r2.shared.Link;
 
@@ -25,18 +25,21 @@ public class FolioPageFragmentAdapter extends FragmentStatePagerAdapter {
 
     private static final String LOG_TAG = FolioPageFragmentAdapter.class.getSimpleName();
     private List<Link> mSpineReferences;
+    private int numFragments = 2;
     private String mEpubFileName;
     private String mBookId;
+    private Config config;
     private ArrayList<Fragment> fragments;
     private ArrayList<Fragment.SavedState> savedStateList;
 
     public FolioPageFragmentAdapter(FragmentManager fragmentManager, List<Link> spineReferences,
-                                    String epubFileName, String bookId) {
+                                    String epubFileName, String bookId, Config config) {
         super(fragmentManager);
         this.mSpineReferences = spineReferences;
         this.mEpubFileName = epubFileName;
         this.mBookId = bookId;
-        fragments = new ArrayList<>(Arrays.asList(new Fragment[mSpineReferences.size()]));
+        this.config = config;
+        fragments = new ArrayList<>(Arrays.asList(new Fragment[numFragments]));
     }
 
     @Override
@@ -56,13 +59,18 @@ public class FolioPageFragmentAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
-        if (mSpineReferences.size() == 0 || position < 0 || position >= mSpineReferences.size())
+        if (numFragments == 0 || position < 0 || position >= numFragments)
             return null;
 
         Fragment fragment = fragments.get(position);
-        if (fragment == null) {
+        if (fragment == null && position == 0) {
             fragment = FolioPageFragment.newInstance(position,
-                    mEpubFileName, mSpineReferences.get(position), mBookId);
+                    mEpubFileName, mSpineReferences.get(0), mBookId);
+            fragments.set(position, fragment);
+        } else if (fragment == null && position == 1 ) {
+            fragment = DummyFragment.newInstance(
+                    config.getColorMode().bg_color_value,
+                    config.getColorMode().text_color_value);
             fragments.set(position, fragment);
         }
         return fragment;
@@ -102,6 +110,6 @@ public class FolioPageFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return mSpineReferences.size();
+        return numFragments;
     }
 }

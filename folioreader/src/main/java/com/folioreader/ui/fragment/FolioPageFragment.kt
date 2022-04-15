@@ -99,7 +99,7 @@ class FolioPageFragment : Fragment(),
     private var loadingView: LoadingView? = null
     private var mScrollSeekbar: VerticalSeekbar? = null
     var mWebview: FolioWebView? = null
-    private var webViewPager: WebViewPager? = null
+    var webViewPager: WebViewPager? = null
     private var mPagesLeftTextView: TextView? = null
     private var mMinutesLeftTextView: TextView? = null
     private var mActivityCallback: FolioActivityCallback? = null
@@ -119,6 +119,8 @@ class FolioPageFragment : Fragment(),
     private var mConfig: Config? = null
     private var mBookId: String? = null
     var searchLocatorVisible: SearchLocator? = null
+
+    private var initialPage: Int = 0
 
     private lateinit var chapterUrl: Uri
 
@@ -353,6 +355,10 @@ class FolioPageFragment : Fragment(),
             loadingView!!.show()
             mWebview!!.loadUrl("javascript:scrollToFirst()")
         }
+    }
+
+    fun setInitialPage(page: Int) {
+        initialPage = page
     }
 
     @SuppressLint("JavascriptInterface", "SetJavaScriptEnabled")
@@ -632,7 +638,7 @@ class FolioPageFragment : Fragment(),
             LOG_TAG, "-> setHorizontalPageCount = " + horizontalPageCount
                     + " -> " + spineItem.href
         )
-
+        mActivityCallback!!.setTotalPages(horizontalPageCount)
         mWebview!!.setHorizontalPageCount(horizontalPageCount)
     }
 

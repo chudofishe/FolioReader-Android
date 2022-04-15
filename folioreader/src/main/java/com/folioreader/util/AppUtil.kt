@@ -99,6 +99,7 @@ class AppUtil {
                 obj.put(Config.CONFIG_DIRECTION, config.direction.toString())
                 obj.put(Config.CONFIG_COLOR_MODE, config.colorMode.toString())
                 obj.put(Config.CONFIG_IS_IGNORE_FIRST_CHAPTER, config.isIgnoreFirstChapter)
+                obj.put(Config.CONFIG_PROGRESS, config.progress)
                 SharedPreferenceUtil.putSharedPreferencesString(
                     context, Config.INTENT_CONFIG,
                     obj.toString()

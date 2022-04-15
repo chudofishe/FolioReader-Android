@@ -106,9 +106,10 @@ public class HomeActivity extends AppCompatActivity
                 .setAllowedDirection(Config.AllowedDirection.ONLY_HORIZONTAL)
                 .setDirection(Config.Direction.HORIZONTAL)
                 .setFont(Config.Font.GEORGIA)
-                .setColorMode(Config.ColorMode.YELLOW)
+                .setColorMode(Config.ColorMode.DARK)
                 .setIgnoreFirstChapter(true)
-                .setFontSize(4);
+                .setProgress(1f)
+                .setFontSize(6);
 
 //        Config config = AppUtil.getSavedConfig(getApplicationContext());
 //        if (config == null)

@@ -22,6 +22,7 @@ import com.folioreader.FolioReader
 import com.folioreader.R
 import com.folioreader.model.DisplayUnit
 import com.folioreader.model.event.MediaOverlayPlayPauseEvent
+import com.folioreader.model.event.ReloadDataEvent
 import com.folioreader.model.locators.ReadLocator
 import com.folioreader.model.locators.SearchLocator
 import com.folioreader.ui.activity.FolioActivity
@@ -61,6 +62,7 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
     private var lastReadLocator: ReadLocator? = null
     private var density: Float = 0.toFloat()
     private var displayMetrics: DisplayMetrics? = null
+    private var totalPages: Int = 0
 
     private lateinit var config: Config
 
@@ -115,17 +117,15 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configFolio()
+//        currentFragment?.webViewPager?.setCurrentPage(4)
+        reloadWebView()
+//        goToPage(config.progress)
     }
 
     private fun setupBook() {
         Log.v(FolioActivity.LOG_TAG, "-> setupBook")
         initBook()
         onBookInitSuccess()
-//        try {
-//
-//        } catch (e: Exception) {
-//            Log.e(FolioActivity.LOG_TAG, "-> Failed to initialize book", e)
-//        }
     }
 
     private fun initBook() {
@@ -240,13 +240,6 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
                         if (folioPageFragment.mWebview != null)
                             folioPageFragment.mWebview!!.dismissPopupWindow()
                     }
-
-                    folioPageFragment = mFolioPageFragmentAdapter!!.getItem(position + 1) as FolioPageFragment?
-                    if (folioPageFragment != null) {
-                        folioPageFragment.scrollToFirst()
-                        if (folioPageFragment.mWebview != null)
-                            folioPageFragment.mWebview!!.dismissPopupWindow()
-                    }
                 }
             }
         })
@@ -254,7 +247,7 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         mFolioPageViewPager!!.setDirection(direction)
         mFolioPageFragmentAdapter = FolioPageFragmentAdapter(
             childFragmentManager,
-            spine, bookFileName, mBookId
+            spine, bookFileName, mBookId, config
         )
         mFolioPageViewPager!!.adapter = mFolioPageFragmentAdapter
 
@@ -272,6 +265,8 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
             currentChapterIndex = getChapterIndex(entryReadLocator)
             mFolioPageViewPager!!.currentItem = currentChapterIndex
         }
+
+        currentFragment?.setInitialPage(4)
     }
 
     private fun setConfig(args: Bundle) {
@@ -345,6 +340,22 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         return false
     }
 
+    fun goToPage(progress: Float) {
+
+    }
+
+    fun calculatePage(progress: Float, totalPages: Int): Int {
+        val res: Int
+        if (progress != 0f || progress != 1f) {
+            for (i in 2 .. totalPages) {
+                if (i >= (i - 1 / totalPages).toFloat() && i <= (i + 1 / totalPages).toFloat()) {
+                    return i
+                }
+            }
+        }
+        return if (progress == 1f) 1 else 0
+    }
+
     override fun getDirection(): Config.Direction {
         return direction
     }
@@ -361,7 +372,7 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         mFolioPageViewPager!!.setDirection(newDirection)
         mFolioPageFragmentAdapter = FolioPageFragmentAdapter(
             childFragmentManager,
-            spine, bookFileName, mBookId
+            spine, bookFileName, mBookId, config
         )
         mFolioPageViewPager!!.adapter = mFolioPageFragmentAdapter
         mFolioPageViewPager!!.currentItem = currentChapterIndex
@@ -430,6 +441,15 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
 
     override fun onPageChanged(currentPage: Int, totalPages: Int) {
         Log.d("FolioContentFragment", "currentPage: $currentPage, totalPages: $totalPages")
+        this.totalPages = totalPages
+    }
+
+    private fun reloadWebView() {
+        EventBus.getDefault().post(ReloadDataEvent())
+    }
+
+    override fun setTotalPages(pages: Int) {
+        totalPages = pages
     }
 
 }

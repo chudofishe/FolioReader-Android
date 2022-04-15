@@ -355,6 +355,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         toolbar!!.setTitleTextColor(ContextCompat.getColor(this, R.color.night_title_text_color))
     }
 
+    override fun setTotalPages(pages: Int?) {
+        TODO("Not yet implemented")
+    }
+
     override fun onPageChanged(currentPage: Int?, totalPages: Int?) {
         Log.d(LOG_TAG, "currentPage: $currentPage, totalPages: $totalPages")
     }
@@ -562,7 +566,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         mFolioPageViewPager!!.setDirection(newDirection)
         mFolioPageFragmentAdapter = FolioPageFragmentAdapter(
             supportFragmentManager,
-            spine, bookFileName, mBookId
+            spine, bookFileName, mBookId, null
         )
         mFolioPageViewPager!!.adapter = mFolioPageFragmentAdapter
         mFolioPageViewPager!!.currentItem = currentChapterIndex
@@ -903,7 +907,7 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         mFolioPageViewPager!!.setDirection(direction)
         mFolioPageFragmentAdapter = FolioPageFragmentAdapter(
             supportFragmentManager,
-            spine, bookFileName, mBookId
+            spine, bookFileName, mBookId, null
         )
         mFolioPageViewPager!!.adapter = mFolioPageFragmentAdapter
 
