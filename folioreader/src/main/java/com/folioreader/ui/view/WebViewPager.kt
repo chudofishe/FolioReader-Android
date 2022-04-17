@@ -27,6 +27,7 @@ class WebViewPager : ViewPager {
     private var gestureDetector: GestureDetectorCompat? = null
 
     private var lastGestureType: LastGestureType? = null
+    private var scrollState: Int = 0
 
     private enum class LastGestureType {
         OnSingleTapUp, OnLongPress, OnFling, OnScroll
@@ -49,6 +50,10 @@ class WebViewPager : ViewPager {
 
                 isScrolling = true
 
+                if (position == horizontalPageCount - 1 && scrollState == SCROLL_STATE_DRAGGING) {
+                    folioWebView?.onNextChapter()
+                }
+
                 if (takeOverScrolling && folioWebView != null) {
                     val scrollX = folioWebView!!.getScrollXPixelsForPage(position) + positionOffsetPixels
                     //Log.d(LOG_TAG, "-> onPageScrolled -> scrollX = " + scrollX);
@@ -67,17 +72,10 @@ class WebViewPager : ViewPager {
                 folioWebView?.onPageChanged(position, horizontalPageCount)
             }
 
-            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageScrollStateChanged(state: Int) {
+                scrollState = state
+            }
         })
-    }
-
-    private fun getScrollStateString(state: Int): String {
-        return when (state) {
-            ViewPager.SCROLL_STATE_IDLE -> "SCROLL_STATE_IDLE"
-            ViewPager.SCROLL_STATE_DRAGGING -> "SCROLL_STATE_DRAGGING"
-            ViewPager.SCROLL_STATE_SETTLING -> "SCROLL_STATE_SETTLING"
-            else -> "UNKNOWN_STATE"
-        }
     }
 
     fun setHorizontalPageCount(horizontalPageCount: Int) {

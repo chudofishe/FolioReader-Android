@@ -798,4 +798,8 @@ class FolioWebView : WebView {
     fun onPageChanged(currentPage: Int, totalPages: Int) {
         folioActivityCallback.onPageChanged(currentPage, totalPages)
     }
+
+    fun onNextChapter() {
+        folioActivityCallback.onNextChapter()
+    }
 }
