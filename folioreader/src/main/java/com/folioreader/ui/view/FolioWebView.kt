@@ -100,6 +100,8 @@ class FolioWebView : WebView {
     private var destroyed: Boolean = false
     private var handleHeight: Int = 0
 
+    private var allowNavigate = true
+
     private var lastScrollType: LastScrollType? = null
 
     val contentHeightVal: Int
@@ -799,11 +801,20 @@ class FolioWebView : WebView {
         folioActivityCallback.onPageChanged(currentPage, totalPages)
     }
 
+
+    //onNextChapter and onPrevChapter may be called multiple times, we just need these methods
+    //to be called once before reader fragment recreation
     fun onNextChapter() {
-        folioActivityCallback.onNextChapter()
+        if (allowNavigate) {
+            allowNavigate = false
+            folioActivityCallback.onNextChapter()
+        }
     }
 
     fun onPreviousChapter() {
-        folioActivityCallback.onPreviousChapter()
+        if (allowNavigate) {
+             allowNavigate = false
+            folioActivityCallback.onPreviousChapter()
+        }
     }
 }
