@@ -54,7 +54,7 @@ class WebViewPager : ViewPager {
                     folioWebView?.onNextChapter()
                 }
 
-                if (position == 0 && scrollState == SCROLL_STATE_DRAGGING) {
+                if (position == 0 && scrollState == SCROLL_STATE_DRAGGING && positionOffset == 0f) {
                     folioWebView?.onPreviousChapter()
                 }
 
