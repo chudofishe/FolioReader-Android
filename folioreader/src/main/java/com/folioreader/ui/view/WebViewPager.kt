@@ -54,6 +54,10 @@ class WebViewPager : ViewPager {
                     folioWebView?.onNextChapter()
                 }
 
+                if (position == 0 && scrollState == SCROLL_STATE_DRAGGING) {
+                    folioWebView?.onPreviousChapter()
+                }
+
                 if (takeOverScrolling && folioWebView != null) {
                     val scrollX = folioWebView!!.getScrollXPixelsForPage(position) + positionOffsetPixels
                     //Log.d(LOG_TAG, "-> onPageScrolled -> scrollX = " + scrollX);

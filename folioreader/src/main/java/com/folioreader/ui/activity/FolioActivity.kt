@@ -359,6 +359,10 @@ class FolioActivity : AppCompatActivity(), FolioActivityCallback, MediaControlle
         TODO("Not yet implemented")
     }
 
+    override fun onPreviousChapter() {
+        TODO("Not yet implemented")
+    }
+
     override fun onPageChanged(currentPage: Int?, totalPages: Int?) {
         Log.d(LOG_TAG, "currentPage: $currentPage, totalPages: $totalPages")
     }

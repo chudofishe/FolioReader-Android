@@ -802,4 +802,8 @@ class FolioWebView : WebView {
     fun onNextChapter() {
         folioActivityCallback.onNextChapter()
     }
+
+    fun onPreviousChapter() {
+        folioActivityCallback.onPreviousChapter()
+    }
 }

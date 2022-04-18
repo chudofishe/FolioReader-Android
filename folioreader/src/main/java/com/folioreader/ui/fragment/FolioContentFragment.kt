@@ -395,6 +395,10 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         Log.d("FolioContentFragment", "next chapter")
     }
 
+    override fun onPreviousChapter() {
+        Log.d("FolioContentFragment", "previous chapter")
+    }
+
     override fun getTopDistraction(unit: DisplayUnit?): Int {
         TODO("Not yet implemented")
     }
