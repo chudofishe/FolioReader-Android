@@ -121,8 +121,7 @@ class WebViewPager : ViewPager {
 
         adapter = WebViewPagerAdapter(populateViewsList())
 
-
-        initialPage = (config.progress * horizontalPageCount.toFloat()).toInt()
+        initialPage = config.progress.toInt()
         uiHandler!!.post {currentItem = initialPage}
         if (folioWebView == null)
             folioWebView = (parent as View).findViewById(R.id.folioWebView)
