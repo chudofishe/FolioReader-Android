@@ -2,14 +2,21 @@ package com.folioreader.ui.view
 
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.webkit.JavascriptInterface
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.OneShotPreDrawListener
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
+import com.folioreader.Config
 import com.folioreader.R
+import com.folioreader.model.event.ReloadDataEvent
+import com.folioreader.util.AppUtil
+import org.greenrobot.eventbus.EventBus
 
 class WebViewPager : ViewPager {
 
@@ -19,7 +26,7 @@ class WebViewPager : ViewPager {
     }
 
     private var horizontalPageCount: Int = 0
-    private var folioWebView: FolioWebView? = null
+    var folioWebView: FolioWebView? = null
     private var takeOverScrolling: Boolean = false
     var isScrolling: Boolean = false
         private set
@@ -28,6 +35,12 @@ class WebViewPager : ViewPager {
 
     private var lastGestureType: LastGestureType? = null
     private var scrollState: Int = 0
+
+    private var initialPageSet = false
+
+    private var initialPage = 0
+
+    private lateinit var config: Config
 
     private enum class LastGestureType {
         OnSingleTapUp, OnLongPress, OnFling, OnScroll
@@ -39,14 +52,20 @@ class WebViewPager : ViewPager {
     }
 
     private fun init() {
-
         uiHandler = Handler()
         gestureDetector = GestureDetectorCompat(context, GestureListener())
+
+        val config = AppUtil.getSavedConfig(context)
+        this.config = config!!
 
         addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                 // Log.d(LOG_TAG, "-> onPageScrolled -> position = " + position +
                 // ", positionOffset = " + positionOffset + ", positionOffsetPixels = " + positionOffsetPixels);
+//                if (!initialPageSet) {
+//                    initialPageSet = true
+//                    currentItem = 5
+//                }
 
                 isScrolling = true
 
@@ -73,6 +92,7 @@ class WebViewPager : ViewPager {
 
             override fun onPageSelected(position: Int) {
                 Log.v(LOG_TAG, "-> onPageSelected -> $position")
+//                currentItem = 5
                 folioWebView?.onPageChanged(position, horizontalPageCount)
             }
 
@@ -82,22 +102,46 @@ class WebViewPager : ViewPager {
         })
     }
 
+    fun calculatePage(progress: Float, totalPages: Int): Int {
+        val res: Int
+        if (progress != 0f || progress != 1f) {
+            for (i in 2 .. totalPages) {
+                if (i >= (i - 1 / totalPages).toFloat() && i <= (i + 1 / totalPages).toFloat()) {
+                    return i
+                }
+            }
+        }
+        return if (progress == 1f) 1 else 0
+    }
+
     fun setHorizontalPageCount(horizontalPageCount: Int) {
         //Log.d(LOG_TAG, "-> horizontalPageCount = " + horizontalPageCount);
 
         this.horizontalPageCount = horizontalPageCount
-        adapter = WebViewPagerAdapter()
-        currentItem = 0
 
+        adapter = WebViewPagerAdapter(populateViewsList())
+
+
+        initialPage = (config.progress * horizontalPageCount.toFloat()).toInt()
+        uiHandler!!.post {currentItem = initialPage}
         if (folioWebView == null)
             folioWebView = (parent as View).findViewById(R.id.folioWebView)
+    }
+
+    private fun populateViewsList(): List<View> {
+        val list = mutableListOf<View>()
+        repeat(horizontalPageCount) {
+            val view = LayoutInflater.from(this.context)
+                .inflate(R.layout.view_webview_pager, this, false)
+            list.add(view)
+        }
+        return list
     }
 
     @JavascriptInterface
     fun setCurrentPage(pageIndex: Int) {
         Log.v(LOG_TAG, "-> setCurrentItem -> pageIndex = $pageIndex")
-
-        uiHandler!!.post { setCurrentItem(pageIndex, false) }
+//        uiHandler!!.post {currentItem = pageIndex}
     }
 
     @JavascriptInterface
@@ -171,10 +215,11 @@ class WebViewPager : ViewPager {
         return superReturn
     }
 
-    private inner class WebViewPagerAdapter : PagerAdapter() {
+    inner class WebViewPagerAdapter(private val viewsList: List<View>) : PagerAdapter() {
+
 
         override fun getCount(): Int {
-            return horizontalPageCount
+            return viewsList.size
         }
 
         override fun isViewFromObject(view: View, `object`: Any): Boolean {
@@ -182,21 +227,7 @@ class WebViewPager : ViewPager {
         }
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-
-            val view = LayoutInflater.from(container.context)
-                .inflate(R.layout.view_webview_pager, container, false)
-
-            // Debug code
-            // Set alpha for folioWebView in folio_page_fragment.xml to 0.5 also.
-            /*if (position % 2 == 0) {
-                view.setBackgroundResource(R.drawable.green_border_background)
-            } else {
-                view.setBackgroundResource(R.drawable.blue_border_background)
-            }
-
-            val textView = view.findViewById<TextView>(R.id.textView)
-            textView.text = Integer.toString(position)*/
-
+            val view = viewsList[position]
             container.addView(view)
             return view
         }
