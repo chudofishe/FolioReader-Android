@@ -29,4 +29,14 @@
     <color name="highlight_blue">#ADD8FF</color>
     <color name="highlight_pink">#FFB0CA</color>
 
+    <color name="bg_yellow">#D4C69F</color>
+    <color name="bg_gray">#5A5A5C</color>
+    <color name="bg_dark">#343434</color>
+    <color name="bg_light">#FFFFFF</color>
+
+    <color name="bg_yellow_text">#5A5A5C</color>
+    <color name="bg_gray_text">#FFFFFF</color>
+    <color name="bg_dark_text">#D1D1D1</color>
+    <color name="bg_light_text">#000000</color>
+
 </resources>

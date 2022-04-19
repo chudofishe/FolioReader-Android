@@ -436,6 +436,10 @@ class FolioWebView : WebView {
         }
     }
 
+    fun getHorizontalPageCount(): Int {
+        return horizontalPageCount
+    }
+
     override fun scrollTo(x: Int, y: Int) {
         super.scrollTo(x, y)
         //Log.d(LOG_TAG, "-> scrollTo -> x = " + x);

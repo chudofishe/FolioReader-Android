@@ -31,6 +31,8 @@ public interface FolioActivityCallback {
 
     void onPreviousChapter();
 
+    void setTotalPages(Integer pages);
+
     void onPageChanged(Integer currentPage, Integer totalPages);
 
     int getTopDistraction(final DisplayUnit unit);

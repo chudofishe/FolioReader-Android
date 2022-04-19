@@ -27,6 +27,7 @@ public class Config implements Parcelable {
     public static final String CONFIG_DIRECTION = "direction";
     public static final String CONFIG_COLOR_MODE = "colorMode";
     public static final String CONFIG_IS_IGNORE_FIRST_CHAPTER = "ignoreFirstChapter";
+    public static final String CONFIG_PROGRESS = "progress";
     private static final AllowedDirection DEFAULT_ALLOWED_DIRECTION = AllowedDirection.ONLY_VERTICAL;
     private static final Direction DEFAULT_DIRECTION = Direction.VERTICAL;
     private static final int DEFAULT_THEME_COLOR_INT =
@@ -45,6 +46,7 @@ public class Config implements Parcelable {
     private AllowedDirection allowedDirection = DEFAULT_ALLOWED_DIRECTION;
     private String localPath;
     private Direction direction = DEFAULT_DIRECTION;
+    private float progress;
 
     /**
      * Reading modes available
@@ -64,7 +66,18 @@ public class Config implements Parcelable {
      * Reader color modes
      */
     public enum ColorMode {
-        YELLOW, GRAY, DARK, LIGHT
+        YELLOW (R.color.bg_yellow, R.color.bg_yellow_text),
+        GRAY (R.color.bg_gray, R.color.bg_gray_text),
+        DARK (R.color.bg_dark, R.color.bg_dark_text),
+        LIGHT (R.color.bg_light, R.color.bg_light_text);
+
+        public final int bg_color_value;
+        public final int text_color_value;
+
+        ColorMode(int bg_color_value, int text_color_value) {
+            this.bg_color_value = bg_color_value;
+            this.text_color_value = text_color_value;
+        }
     }
 
     /**
@@ -102,6 +115,7 @@ public class Config implements Parcelable {
         dest.writeString(direction.toString());
         dest.writeString(colorMode.toString());
         dest.writeByte((byte) (ignoreFirstChapter ? 1 : 0));
+        dest.writeFloat(progress);
     }
 
     protected Config(Parcel in) {
@@ -114,6 +128,7 @@ public class Config implements Parcelable {
         direction = getDirectionFromString(LOG_TAG, in.readString());
         colorMode = getColorModeFromString(LOG_TAG, in.readString());
         ignoreFirstChapter = in.readByte() != 0;
+        progress = in.readFloat();
     }
 
     public Config() {
@@ -130,6 +145,7 @@ public class Config implements Parcelable {
         direction = getDirectionFromString(LOG_TAG, jsonObject.optString(CONFIG_DIRECTION));
         colorMode = getColorModeFromString(LOG_TAG, jsonObject.optString(CONFIG_COLOR_MODE));
         ignoreFirstChapter = jsonObject.optBoolean(CONFIG_IS_IGNORE_FIRST_CHAPTER);
+        progress = getProgressFromDouble(LOG_TAG, jsonObject.optDouble(CONFIG_PROGRESS));
     }
 
     public static Direction getDirectionFromString(final String LOG_TAG, String directionString) {
@@ -204,6 +220,10 @@ public class Config implements Parcelable {
         }
     }
 
+    public static float getProgressFromDouble(final String LOG_TAG, double progress) {
+        return (float) progress;
+    }
+
     public Font getFont() {
         return font;
     }
@@ -220,6 +240,15 @@ public class Config implements Parcelable {
 
     public Config setIgnoreFirstChapter(boolean ignoreFirstChapter) {
         this.ignoreFirstChapter = ignoreFirstChapter;
+        return this;
+    }
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public Config setProgress(float progress) {
+        this.progress = progress;
         return this;
     }
 
