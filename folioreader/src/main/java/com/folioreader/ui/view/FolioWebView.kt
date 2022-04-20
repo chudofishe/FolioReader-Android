@@ -821,4 +821,8 @@ class FolioWebView : WebView {
             folioActivityCallback.onPreviousChapter()
         }
     }
+
+    fun viewPagerLoaded() {
+        folioActivityCallback.onLoad(horizontalPageCount)
+    }
 }

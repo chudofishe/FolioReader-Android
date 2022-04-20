@@ -29,6 +29,8 @@ public interface FolioActivityCallback {
 
     void onNextChapter();
 
+    void onLoad(Integer totalPages);
+
     void onPreviousChapter();
 
     void setTotalPages(Integer pages);

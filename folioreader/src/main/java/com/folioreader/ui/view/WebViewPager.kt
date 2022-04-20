@@ -131,6 +131,8 @@ class WebViewPager : ViewPager {
             initialPage = config.progress.toInt()
         }
         uiHandler!!.post {currentItem = initialPage}
+
+        folioWebView!!.viewPagerLoaded()
     }
 
     private fun populateViewsList(): List<View> {

@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.util.Log
@@ -212,13 +214,21 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
 
         mFolioPageViewPager = view?.findViewById(R.id.folioPageViewPager)
         // Replacing with addOnPageChangeListener(), onPageSelected() is not invoked
-        mFolioPageViewPager!!.setOnPageChangeListener(object : DirectionalViewpager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        mFolioPageViewPager!!.setOnPageChangeListener(object :
+            DirectionalViewpager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
 
             }
 
             override fun onPageSelected(position: Int) {
-                Log.v(FolioActivity.LOG_TAG, "-> onPageSelected -> DirectionalViewpager -> position = $position")
+                Log.v(
+                    FolioActivity.LOG_TAG,
+                    "-> onPageSelected -> DirectionalViewpager -> position = $position"
+                )
 
 //                EventBus.getDefault().post(
 //                    MediaOverlayPlayPauseEvent(
@@ -234,18 +244,21 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
                 if (state == DirectionalViewpager.SCROLL_STATE_IDLE) {
                     val position = mFolioPageViewPager!!.currentItem
                     Log.v(
-                        FolioActivity.LOG_TAG, "-> onPageScrollStateChanged -> DirectionalViewpager -> " +
+                        FolioActivity.LOG_TAG,
+                        "-> onPageScrollStateChanged -> DirectionalViewpager -> " +
                                 "position = " + position
                     )
 
-                    var folioPageFragment = mFolioPageFragmentAdapter!!.getItem(position - 1) as FolioPageFragment?
+                    var folioPageFragment =
+                        mFolioPageFragmentAdapter!!.getItem(position - 1) as FolioPageFragment?
                     if (folioPageFragment != null) {
                         folioPageFragment.scrollToLast()
                         if (folioPageFragment.mWebview != null)
                             folioPageFragment.mWebview!!.dismissPopupWindow()
                     }
 
-                    folioPageFragment = mFolioPageFragmentAdapter!!.getItem(position + 1) as FolioPageFragment?
+                    folioPageFragment =
+                        mFolioPageFragmentAdapter!!.getItem(position + 1) as FolioPageFragment?
                     if (folioPageFragment != null) {
                         folioPageFragment.scrollToFirst()
                         if (folioPageFragment.mWebview != null)
@@ -413,6 +426,10 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
 
     override fun onNextChapter() {
         Log.d("FolioContentFragment", "next chapter")
+    }
+
+    override fun onLoad(totalPages: Int) {
+        Log.d("FolioContentFragment","loaded, page count: $totalPages")
     }
 
     override fun onPreviousChapter() {
