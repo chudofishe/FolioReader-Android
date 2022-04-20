@@ -121,10 +121,16 @@ class WebViewPager : ViewPager {
 
         adapter = WebViewPagerAdapter(populateViewsList())
 
-        initialPage = config.progress.toInt()
-        uiHandler!!.post {currentItem = initialPage}
         if (folioWebView == null)
             folioWebView = (parent as View).findViewById(R.id.folioWebView)
+
+        if (config.progress == -2f) {
+            initialPage = horizontalPageCount - 1
+            folioWebView!!.loadUrl("javascript:scrollToLast()")
+        } else {
+            initialPage = config.progress.toInt()
+        }
+        uiHandler!!.post {currentItem = initialPage}
     }
 
     private fun populateViewsList(): List<View> {

@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity
                 .setFont(Config.Font.GEORGIA)
                 .setColorMode(Config.ColorMode.YELLOW)
                 .setIgnoreFirstChapter(true)
-                .setProgress(0.5f)
+                .setProgress(-2f)
                 .setFontSize(6);
 
 //        Config config = AppUtil.getSavedConfig(getApplicationContext());
