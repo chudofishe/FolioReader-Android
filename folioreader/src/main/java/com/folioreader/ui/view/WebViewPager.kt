@@ -128,7 +128,7 @@ class WebViewPager : ViewPager {
             initialPage = horizontalPageCount - 1
             folioWebView!!.loadUrl("javascript:scrollToLast()")
         } else {
-            initialPage = (config.progress * horizontalPageCount - 1).toInt()
+            initialPage = (config.progress * horizontalPageCount).toInt()
         }
         uiHandler!!.post {currentItem = initialPage}
 
