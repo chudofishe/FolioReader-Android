@@ -81,11 +81,14 @@ class WebViewPager : ViewPager {
             }
 
             override fun onPageSelected(position: Int) {
-                Log.v(LOG_TAG, "-> onPageSelected -> $position")
-                if (position == horizontalPageCount - 1) {
+                Log.v(LOG_TAG, "-> onPageSelected -> $position, scrollstate=$scrollState")
+                if (position == horizontalPageCount - 1 && (scrollState == SCROLL_STATE_DRAGGING
+                            || scrollState == SCROLL_STATE_SETTLING)) {
                     folioWebView?.onNextChapter()
+                    Log.d("privet", "onNextChapter")
                 } else {
                     folioWebView?.onPageChanged(position, horizontalPageCount - 1)
+                    Log.d("privet", "onPageChanged")
                 }
             }
 
