@@ -58,20 +58,10 @@ class WebViewPager : ViewPager {
         val config = AppUtil.getSavedConfig(context)
         this.config = config!!
 
-        addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // Log.d(LOG_TAG, "-> onPageScrolled -> position = " + position +
-                // ", positionOffset = " + positionOffset + ", positionOffsetPixels = " + positionOffsetPixels);
-//                if (!initialPageSet) {
-//                    initialPageSet = true
-//                    currentItem = 5
-//                }
 
                 isScrolling = true
-
-                if (position == horizontalPageCount - 1 && scrollState == SCROLL_STATE_DRAGGING) {
-                    folioWebView?.onNextChapter()
-                }
 
                 if (position == 0 && scrollState == SCROLL_STATE_DRAGGING && positionOffset == 0f) {
                     folioWebView?.onPreviousChapter()
@@ -92,26 +82,17 @@ class WebViewPager : ViewPager {
 
             override fun onPageSelected(position: Int) {
                 Log.v(LOG_TAG, "-> onPageSelected -> $position")
-//                currentItem = 5
-                folioWebView?.onPageChanged(position, horizontalPageCount)
+                if (position == horizontalPageCount - 1) {
+                    folioWebView?.onNextChapter()
+                } else {
+                    folioWebView?.onPageChanged(position, horizontalPageCount - 1)
+                }
             }
 
             override fun onPageScrollStateChanged(state: Int) {
                 scrollState = state
             }
         })
-    }
-
-    fun calculatePage(progress: Float, totalPages: Int): Int {
-        val res: Int
-        if (progress != 0f || progress != 1f) {
-            for (i in 2 .. totalPages) {
-                if (i >= (i - 1 / totalPages).toFloat() && i <= (i + 1 / totalPages).toFloat()) {
-                    return i
-                }
-            }
-        }
-        return if (progress == 1f) 1 else 0
     }
 
     fun setHorizontalPageCount(horizontalPageCount: Int) {
