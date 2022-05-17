@@ -99,19 +99,7 @@ class FolioContentFragment : Fragment(), FolioActivityCallback {
         display.getRealMetrics(displayMetrics)
         density = displayMetrics!!.density
 
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                Constants.getWriteExternalStoragePerms(),
-                Constants.WRITE_EXTERNAL_STORAGE_REQUEST
-            )
-        } else {
-            setupBook()
-        }
+        setupBook()
 
         return inflater.inflate(R.layout.fragment_content, container, false)
     }
